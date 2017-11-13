@@ -1,19 +1,22 @@
 {
-  "name": "lenovo-turns-electron",
-  "version": "1.0.0",
-  "description": "",
+  "name": "lenovoturns",
+  "productName": "lenovoturns",
+  "version": "0.0.1",
+  "description": "Electron desktop app",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "build": "electron-packager . --out=dist/win --platform=win32 --arch=x64 --icon=src/assets/images/lenovo-logo.png --asar --overwrite"
+    "build": "electron-packager . --out=dist/win --platform=win32 --arch=x64 --icon=src/assets/images/lenovo-logo.png --asar --overwrite",
+    "postbuild": "node package.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "electron": "^1.7.9",
-    "electron-packager": "^9.1.0"
+    "electron-packager": "^9.1.0",
+    "electron-winstaller": "^2.6.3"
   },
   "dependencies": {
     "jquery": "^3.2.1",
