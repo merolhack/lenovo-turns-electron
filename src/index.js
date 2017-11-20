@@ -1,8 +1,9 @@
 'use strict';
 
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 const url = require('url');
+const SocketIOClient = require('socket.io-client');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -20,7 +21,7 @@ function createWindow () {
   }));
 
   // DEBUG: Open the DevTools.
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -32,6 +33,43 @@ function createWindow () {
 
   // Remove the menu
   win.setMenu(null);
+
+  // Connect to the WebSocket
+  const ip = '192.168.1.64';
+  const options = {
+    path: '/turns'
+  };
+  const socket = SocketIOClient('http://'+ip+':80', options);
+  // Functions
+  function getCurrentTurn(cb) {
+    socket.emit('get-turn', {});
+    socket.on('current-turn', function(payload) {
+      cb(payload);
+    });
+  }
+  function subscribeToCurrentTurn(cb) {
+    socket.on('turn-created', function(payload) {
+      cb(null, payload);
+    });
+  }
+  // 
+  socket.on('turn-created', (payload) => {
+      console.log('payload:', payload);
+      // document.getElementById('turn').innerHTML(payload.counter);
+      // ipcMain.send();
+  });
+  // Listen events from the rendered
+  ipcMain.on('get-current-turn', (event, arg) => {
+    console.log('ipcMain | event:', event, 'arg:', arg);  // prints "ping"
+    getCurrentTurn(function(payload) {
+        console.log('payload:', JSON.stringify(payload));
+        event.sender.send('set-current-turn', {counter: payload.group + '' + payload.counter});
+    });
+    subscribeToCurrentTurn(function(err, payload) {
+        console.log('currentTurn:', payload);
+        event.sender.send('set-current-turn', {counter: payload.groupName + '' + payload.counter});
+    });
+  });
 }
 
 // This method will be called when Electron has finished
