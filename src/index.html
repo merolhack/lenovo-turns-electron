@@ -1,37 +1,127 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Lenovo store | Turns</title>
+<html lang="es">
+<head>
+  <title>Pantalla - Gestión de Turnos</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
-    <style>
-      body {
-        -webkit-user-select: none;
-        user-select: none;
-        cursor: default;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Turnos</h1>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <div class="input-group">
-            <input type="checkbox" aria-label="activar" name="active">
-            Activar ventanilla
+  <!-- Bootstrap core CSS-->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom fonts for this template-->
+  <link href="assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <!-- Custom styles for this template-->
+  <link href="assets/css/sb-admin.css" rel="stylesheet">
+  <style>
+    body {
+      -webkit-user-select: none;
+      user-select: none;
+      cursor: default;
+    }
+    .disable-panel {
+      background-color: grey;
+    }
+    .disable-panel p {
+      color: grey;
+    }
+  </style>
+</head>
+
+<body class="fixed-nav sticky-footer bg-dark sidenav-toggled" id="page-top">
+
+  <div class="content-wrapper">
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="col-lg-9">
+          <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-clock-o" aria-hidden="true"></i> Servicio activo</div>
+            <div class="card-body bg-screen">
+              <div class="row">
+                <div class="turno-activo-small">
+                  <span class="turno-activo-small-title">Turno</span><br>
+                  <span class="turno-activo-small-codigo"></span><br>
+                </div>
+              </div>
+            </div>
           </div>
+        </div><!-- /activo -->
+
+        <div class="col-lg-3">
+          <div class="col-lg-12">
+            <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-check-circle" aria-hidden="true"></i> Ventanilla</div>
+              <div class="card-body">
+                <form id="change-window">
+                  <div class="form-group">
+                    <label for="number">Número de ventanilla</label>
+                    <input type="number" class="form-control" 
+                      id="number" name="number" 
+                      min="1" step="1"
+                      value="0" required
+                      placeholder="Número de ventanilla">
+                  </div>
+                  <div class="form-group">
+                    <label for="username">Nombre de usuario</label>
+                    <input type="text" class="form-control" 
+                      id="username" name="username" 
+                      value="" required
+                      placeholder="Nombre de usuario">
+                  </div>
+                  <button type="submit" class="btn btn-default">Guardar</button>
+                </form>
+              </div>
+            </div>
+          </div><!-- /number -->
+
+          <div class="col-lg-12" id="service">
+            <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-check-circle" aria-hidden="true"></i> Control de Servicio</div>
+              <div class="card-body">
+                <a href="#" class="btn btn-secondary" id="finish-service">Finalizar Servicio</a>
+                <br><br>
+                <a href="#" class="btn btn-primary" id="new-service">Nuevo Servicio</a>
+              </div>
+            </div>
+          </div><!-- /solicitar -->
+
         </div>
-        <div class="panel-body">
-          <p>Se le ha asignado el siguiente ticket <span id="turn"></span></p>
+      </div>
+
+    </div>
+    <!-- /.container-fluid-->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">¿Listo para Salir?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Seleccione "Cerrar sesión" a continuación si está listo para finalizar su sesión actual.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+            <a class="btn btn-primary" href="login.html">Cerrar Sesión</a>
+          </div>
         </div>
       </div>
     </div>
+
     <script>
         require('./renderer.js');
     </script>
-  </body>
+  </div>
+</body>
+
 </html>

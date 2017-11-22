@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "build": "electron-packager . --out=dist/win --platform=win32 --arch=x64 --icon=src/assets/images/lenovo-logo.png --asar --overwrite",
+    "build": "electron-packager . lenovoturns --out=dist/win --platform=win32 --arch=x64 --icon=src/assets/img/icon/BadwingMoto.png --prune=true --asar --overwrite",
     "postbuild": "node package.js"
   },
   "keywords": [],
