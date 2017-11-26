@@ -20,20 +20,8 @@ window.$ = window.jQuery = require('jquery');
 
             $('div#service').show();
             // Get the initial value
-            ipcRenderer.send('get-current-turn', {});
+            // ipcRenderer.send('get-current-turn', {});
             
-            // 
-            const options = [{
-                title: "Se le ha asignado un nuevo ticket",
-                body: "Ticket número: "
-            }];
-            // Change the text of the DOM element
-            ipcRenderer.on('set-current-turn',function(event, data) {
-                console.log('ipcRenderer |', 'event:', event, 'data:', data);
-                $('span.turno-activo-small-codigo').text(data.counter);
-                options[0].body += data.counter;
-                new Notification(options[0].title, options[0]);
-            });
             // Change the text of the DOM element
             ipcRenderer.on('set-windows-data',function(event, data) {
                 console.log('set-windows-data', event, data);
@@ -44,10 +32,26 @@ window.$ = window.jQuery = require('jquery');
                 $('a#finish-service').show();
                 // Request a new turn
                 ipcRenderer.send('request-turn', {});
+
+                // 
+                const options = [{
+                    title: "Se le ha asignado un nuevo ticket",
+                    body: ""
+                }];
+                // Change the text of the DOM element
+                ipcRenderer.on('set-current-turn',function(event, data) {
+                    console.log('ipcRenderer |', 'event:', event, 'data:', data);
+                    $('span.turno-activo-small-codigo').text(data.counter);
+                    options[0].body = 'Ticket número: ' + data.counter;
+                    new Notification(options[0].title, options[0]);
+                });
             });
             $('a#finish-service').on('click', function(event) {
-                $(this).hide();
-                $('a#new-service').show();
+                ipcRenderer.send('complete-turn', {});
+                pcRenderer.on('turn-completed',function(event, data) {
+                    $(this).hide();
+                    $('a#new-service').show();
+                });
             });
         } else {
             alert('Debe ingresar un número igual o mayor a 1 y menor a 5');
