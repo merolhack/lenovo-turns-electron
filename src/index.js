@@ -34,7 +34,7 @@ function createWindow () {
   }));
 
   // DEBUG: Open the DevTools.
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -61,7 +61,7 @@ function createWindow () {
     }
     function getCurrentTurn(cb) {
       socket.emit('get-turn', {});
-      socket.on('current-turn', function(payload) {
+      socket.on('set-requested-turn', function(payload) {
         cb(payload);
       });
     }

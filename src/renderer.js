@@ -48,6 +48,7 @@ const swal = require('sweetalert');
                 $('a#new-service').show();
             });
             $('a#new-service').on('click', function(event) {
+                $('a#new-service').hide();
                 // Request a new turn
                 ipcRenderer.send('request-turn', {});
                 // Set the options for the Notification
@@ -59,19 +60,23 @@ const swal = require('sweetalert');
                 ipcRenderer.on('there-is-no-turn', function(event, data) {
                     console.log('ipcRenderer | there-is-no-turn', 'event:', event, 'data:', data);
                     swal("Error", "No hay turno disponible", "error");
+                    $('a#new-service').show();
                 });
                 ipcRenderer.on('set-current-turn',function(event, data) {
                     console.log('ipcRenderer | set-current-turn', 'event:', event, 'data:', data);
-                    $('a#new-service').hide();
-                    $('a#finish-service').show();
-                    $('span.turno-activo-small-codigo').text(data.counter);
-                    options[0].body = 'Ticket número: ' + data.counter;
-                    new Notification(options[0].title, options[0]);
+                    if (typeof data !== "undefined" && $('a#new-service').is(':hidden') && !$('a#finish-service').is(':visible')) {
+                        $('a#new-service').hide();
+                        $('a#finish-service').show();
+                        $('span.turno-activo-small-codigo').text(data.counter);
+                        options[0].body = 'Ticket número: ' + data.counter;
+                        new Notification(options[0].title, options[0]);
+                    }
                 });
             });
             $('a#finish-service').on('click', function(event) {
                 ipcRenderer.send('complete-turn', {});
-                pcRenderer.on('turn-completed',function(event, data) {
+                ipcRenderer.on('turn-completed',function(event, data) {
+                    $('span.turno-activo-small-codigo').text('');
                     $('a#finish-service').hide();
                     $('a#new-service').show();
                 });
