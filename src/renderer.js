@@ -10,12 +10,17 @@ const swal = require('sweetalert');
     // Hide the Buttons
     $('a#new-service').hide();
     $('a#finish-service').hide();
-    setTimeout(function() {
-        $('.swal-content__input' ).val('192.168.1.134');
-    }, 300);
+
     swal({
         text: 'Ingrese la IP del panel de control:',
-        content: "input",
+        content: {
+            element: "input",
+            attributes: {
+                placeholder: "Ingrese la IP",
+                type: "text",
+                value: "192.168.1.134"
+            },
+        },
         button: {
             text: "Guardar",
             closeModal: true,
