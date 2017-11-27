@@ -48,19 +48,22 @@ const swal = require('sweetalert');
                 $('a#new-service').show();
             });
             $('a#new-service').on('click', function(event) {
-                $(this).hide();
-                $('a#finish-service').show();
                 // Request a new turn
                 ipcRenderer.send('request-turn', {});
-
-                // 
+                // Set the options for the Notification
                 const options = [{
                     title: "Se le ha asignado un nuevo ticket",
                     body: ""
                 }];
                 // Change the text of the DOM element
+                ipcRenderer.on('there-is-no-turn', function(event, data) {
+                    console.log('ipcRenderer | there-is-no-turn', 'event:', event, 'data:', data);
+                    swal("Error", "No hay turno disponible", "error");
+                });
                 ipcRenderer.on('set-current-turn',function(event, data) {
-                    console.log('ipcRenderer |', 'event:', event, 'data:', data);
+                    console.log('ipcRenderer | set-current-turn', 'event:', event, 'data:', data);
+                    $('a#new-service').hide();
+                    $('a#finish-service').show();
                     $('span.turno-activo-small-codigo').text(data.counter);
                     options[0].body = 'Ticket número: ' + data.counter;
                     new Notification(options[0].title, options[0]);

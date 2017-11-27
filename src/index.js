@@ -34,7 +34,7 @@ function createWindow () {
   }));
 
   // DEBUG: Open the DevTools.
-  // win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -99,9 +99,13 @@ function createWindow () {
       socket.emit('request-turn', requestTurnPayload);
       console.log('ipcMain | event:', event, 'arg:', arg);  // prints "ping"
       getCurrentTurn(function(payload) {
-          console.log('getCurrentTurn | payload:', JSON.stringify(payload));
-          currentTurn = payload;
-          event.sender.send('set-current-turn', {counter: payload.group + '' + payload.counter});
+        console.log('getCurrentTurn | payload:', JSON.stringify(payload));
+        if (!payload.documentFound) {
+          event.sender.send('there-is-no-turn', {});
+        } else {
+          currentTurn = payload.documentFound;
+          event.sender.send('set-current-turn', {counter: currentTurn.group + '' + currentTurn.counter});
+        }
       });
       subscribeToCurrentTurn(function(err, payload) {
           console.log('currentTurn:', payload);
