@@ -114,9 +114,10 @@ function createWindow () {
         windowId: wind0w.number,
         windowGroup: wind0w.group,
       };
+      console.log('complete-turn', requestTurnPayload);
       socket.emit('complete-turn', requestTurnPayload);
       subscribeToTurnCompleted(function(err, payload) {
-        event.sender.send('turn-completed', {counter: payload.groupName + '' + payload.counter});
+        event.sender.send('turn-completed', {payload});
       });
     });
   });

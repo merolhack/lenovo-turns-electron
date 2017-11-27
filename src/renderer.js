@@ -69,7 +69,7 @@ const swal = require('sweetalert');
             $('a#finish-service').on('click', function(event) {
                 ipcRenderer.send('complete-turn', {});
                 pcRenderer.on('turn-completed',function(event, data) {
-                    $(this).hide();
+                    $('a#finish-service').hide();
                     $('a#new-service').show();
                 });
             });
