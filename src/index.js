@@ -46,77 +46,78 @@ function createWindow () {
 
   // Remove the menu
   win.setMenu(null);
-
-  // Connect to the WebSocket
-  const ip = '127.0.0.1'; // 192.168.1.134
-  const options = {
-    path: '/turns'
-  };
-  const socket = SocketIOClient('http://'+ip+':80', options);
-  // Functions
-  function subscribeToUpdateWindowData(cb) {
-    socket.on('active-window-setted', function(payload) {
-      cb(null, payload);
-    });
-  }
-  function getCurrentTurn(cb) {
-    socket.emit('get-turn', {});
-    socket.on('current-turn', function(payload) {
-      cb(payload);
-    });
-  }
-  function subscribeToCurrentTurn(cb) {
-    socket.on('turn-created', function(payload) {
-      cb(null, payload);
-    });
-  }
-  function subscribeToTurnCompleted(cb) {
-    socket.on('turn-completed', function(payload) {
-      cb(null, payload);
-    });
-  }
-  // 
-  socket.on('turn-created', (payload) => {
-      console.log('payload:', payload);
-      // document.getElementById('turn').innerHTML(payload.counter);
-      // ipcMain.send();
-  });
-  // Listen events from the rendered
-  ipcMain.on('update-window-data', (event, arg) => {
-    socket.emit('update-window-data', arg);
-    subscribeToUpdateWindowData(function(err, payload) {
-      console.log('subscribeToUpdateWindowData:', err, payload);
-      wind0w = payload;
-      event.sender.send('set-windows-data', {payload});
-    });
-  });
-  // 
-  ipcMain.on('request-turn', (event, arg) => {
-    const requestTurnPayload = {
-      windowId: wind0w.number,
-      windowGroup: wind0w.group,
+  ipcMain.on('set-ip', (event, arg) => {
+    // Connect to the WebSocket
+    const ip = (arg.ip) ? arg.ip : '127.0.0.1';
+    const options = {
+      path: '/turns'
     };
-    socket.emit('request-turn', requestTurnPayload);
-    console.log('ipcMain | event:', event, 'arg:', arg);  // prints "ping"
-    getCurrentTurn(function(payload) {
-        console.log('getCurrentTurn | payload:', JSON.stringify(payload));
-        currentTurn = payload;
-        event.sender.send('set-current-turn', {counter: payload.group + '' + payload.counter});
+    const socket = SocketIOClient('http://'+ip+':80', options);
+    // Functions
+    function subscribeToUpdateWindowData(cb) {
+      socket.on('active-window-setted', function(payload) {
+        cb(null, payload);
+      });
+    }
+    function getCurrentTurn(cb) {
+      socket.emit('get-turn', {});
+      socket.on('current-turn', function(payload) {
+        cb(payload);
+      });
+    }
+    function subscribeToCurrentTurn(cb) {
+      socket.on('turn-created', function(payload) {
+        cb(null, payload);
+      });
+    }
+    function subscribeToTurnCompleted(cb) {
+      socket.on('turn-completed', function(payload) {
+        cb(null, payload);
+      });
+    }
+    // 
+    socket.on('turn-created', (payload) => {
+        console.log('payload:', payload);
+        // document.getElementById('turn').innerHTML(payload.counter);
+        // ipcMain.send();
     });
-    subscribeToCurrentTurn(function(err, payload) {
-        console.log('currentTurn:', payload);
-        event.sender.send('set-current-turn', {counter: payload.groupName + '' + payload.counter});
+    // Listen events from the rendered
+    ipcMain.on('update-window-data', (event, arg) => {
+      socket.emit('update-window-data', arg);
+      subscribeToUpdateWindowData(function(err, payload) {
+        console.log('subscribeToUpdateWindowData:', err, payload);
+        wind0w = payload;
+        event.sender.send('set-windows-data', {payload});
+      });
     });
-  });
-  ipcMain.on('complete-turn', (event, arg) => {
-    const requestTurnPayload = {
-      counter: currentTurn.counter,
-      windowId: wind0w.number,
-      windowGroup: wind0w.group,
-    };
-    socket.emit('complete-turn', requestTurnPayload);
-    subscribeToTurnCompleted(function(err, payload) {
-      event.sender.send('turn-completed', {counter: payload.groupName + '' + payload.counter});
+    // 
+    ipcMain.on('request-turn', (event, arg) => {
+      const requestTurnPayload = {
+        windowId: wind0w.number,
+        windowGroup: wind0w.group,
+      };
+      socket.emit('request-turn', requestTurnPayload);
+      console.log('ipcMain | event:', event, 'arg:', arg);  // prints "ping"
+      getCurrentTurn(function(payload) {
+          console.log('getCurrentTurn | payload:', JSON.stringify(payload));
+          currentTurn = payload;
+          event.sender.send('set-current-turn', {counter: payload.group + '' + payload.counter});
+      });
+      subscribeToCurrentTurn(function(err, payload) {
+          console.log('currentTurn:', payload);
+          event.sender.send('set-current-turn', {counter: payload.groupName + '' + payload.counter});
+      });
+    });
+    ipcMain.on('complete-turn', (event, arg) => {
+      const requestTurnPayload = {
+        counter: currentTurn.counter,
+        windowId: wind0w.number,
+        windowGroup: wind0w.group,
+      };
+      socket.emit('complete-turn', requestTurnPayload);
+      subscribeToTurnCompleted(function(err, payload) {
+        event.sender.send('turn-completed', {counter: payload.groupName + '' + payload.counter});
+      });
     });
   });
 }

@@ -2,6 +2,7 @@
 
 const {ipcRenderer} = require('electron');
 window.$ = window.jQuery = require('jquery');
+const swal = require('sweetalert');
 
 (function($) {
     // Hide the service Panel
@@ -9,6 +10,20 @@ window.$ = window.jQuery = require('jquery');
     // Hide the Buttons
     $('a#new-service').hide();
     $('a#finish-service').hide();
+    setTimeout(function() {
+        $('.swal-content__input' ).val('192.168.1.134');
+    }, 300);
+    swal({
+        text: 'Ingrese la IP del panel de control:',
+        content: "input",
+        button: {
+            text: "Guardar",
+            closeModal: true,
+        },
+    })
+    .then(function(ip) {
+        ipcRenderer.send('set-ip', {ip});
+    });
     // Set the current window
     $('form#change-window').on('submit', function(event) {
         event.preventDefault();
