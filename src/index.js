@@ -101,7 +101,7 @@ function createWindow () {
         windowGroup: wind0w.group,
       };
       socket.emit('request-turn', requestTurnPayload);
-      console.log('ipcMain | event:', event, 'arg:', arg);  // prints "ping"
+      console.log('ipcMain | arg:', arg);  // prints "ping"
       getCurrentTurn(function(payload) {
         console.log('getCurrentTurn | payload:', JSON.stringify(payload));
         if (!payload.documentFound) {

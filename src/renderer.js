@@ -62,8 +62,13 @@ const swal = require('sweetalert');
                 // Change the text of the DOM element
                 ipcRenderer.on('there-is-no-turn', function(event, data) {
                     console.log('ipcRenderer | there-is-no-turn', 'event:', event, 'data:', data);
-                    swal("Error", "No hay turno disponible", "error");
                     $('a#new-service').show();
+                    if ($('a#new-service').is(':visible') && $('a#finish-service').is(':visible')) {
+                        $('a#finish-service').show();
+                    } else {
+                        swal("Error", "No hay turno disponible", "error");
+                        $('a#new-service').show();
+                    }
                 });
                 ipcRenderer.on('set-current-turn',function(event, data) {
                     console.log('ipcRenderer | set-current-turn', 'event:', event, 'data:', data);
