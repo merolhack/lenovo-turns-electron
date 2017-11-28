@@ -34,7 +34,7 @@ const swal = require('sweetalert');
         event.preventDefault();
         const number = $('input#number').val();
         const username = $('input#username').val();
-        if ( parseInt(number) >= 1 && parseInt(number) <= 5 ) {
+        if ( parseInt(number) >= 1 && parseInt(number) <= 6 ) {
             console.log('update-window-data', {number});
             ipcRenderer.send('update-window-data', {number, username});
 
