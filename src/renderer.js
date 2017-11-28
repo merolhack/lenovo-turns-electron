@@ -82,7 +82,7 @@ const swal = require('sweetalert');
                 });
             });
         } else {
-            alert('Debe ingresar un número igual o mayor a 1 y menor a 5');
+            alert('Debe ingresar un número igual o mayor a 1 y menor a 6');
         }
     });
 })(window.$);

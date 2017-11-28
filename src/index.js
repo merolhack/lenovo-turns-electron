@@ -60,7 +60,7 @@ function createWindow () {
       });
     }
     function getCurrentTurn(cb) {
-      socket.emit('get-turn', {});
+      socket.emit('request-turn', {});
       socket.on('set-requested-turn', function(payload) {
         cb(payload);
       });
