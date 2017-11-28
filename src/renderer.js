@@ -37,15 +37,18 @@ const swal = require('sweetalert');
         if ( parseInt(number) >= 1 && parseInt(number) <= 6 ) {
             console.log('update-window-data', {number});
             ipcRenderer.send('update-window-data', {number, username});
-
-            $('div#service').show();
             // Get the initial value
             // ipcRenderer.send('get-current-turn', {});
             
             // Change the text of the DOM element
             ipcRenderer.on('set-windows-data',function(event, data) {
                 console.log('set-windows-data', event, data);
-                $('a#new-service').show();
+                if ( typeof data.error !== "undefined" ) {
+                    swal("Error", "No existe el número de ventana", "error");
+                } else {
+                    $('div#service').show();
+                    $('a#new-service').show();
+                }
             });
             $('a#new-service').on('click', function(event) {
                 $('a#new-service').hide();

@@ -86,8 +86,12 @@ function createWindow () {
       socket.emit('update-window-data', arg);
       subscribeToUpdateWindowData(function(err, payload) {
         console.log('subscribeToUpdateWindowData:', err, payload);
-        wind0w = payload;
-        event.sender.send('set-windows-data', {payload});
+        if (payload === null) {
+          event.sender.send('set-windows-data', {error: true});
+        } else {
+          wind0w = payload;
+          event.sender.send('set-windows-data', {payload});
+        }
       });
     });
     // 
