@@ -1,10 +1,10 @@
-'use strict';
-
 const {ipcRenderer} = require('electron');
 window.$ = window.jQuery = require('jquery');
 const swal = require('sweetalert');
 
 (function($) {
+    'use strict';
+
     // Hide the service Panel
     $('div#service').hide();
     // Hide the Buttons
@@ -32,9 +32,10 @@ const swal = require('sweetalert');
     // Set the current window
     $('form#change-window').on('submit', function(event) {
         event.preventDefault();
+        $('form#change-window button[type="submit"]').attr('disabled', true);
         const number = $('input#number').val();
         const username = $('input#username').val();
-        if ( parseInt(number) >= 1 && parseInt(number) <= 6 ) {
+        if (parseInt(number) >= 1 && parseInt(number) <= 6) {
             console.log('update-window-data', {number});
             ipcRenderer.send('update-window-data', {number, username});
             // Get the initial value
@@ -92,5 +93,8 @@ const swal = require('sweetalert');
         } else {
             alert('Debe ingresar un número igual o mayor a 1 y menor a 6');
         }
+        setTimeout(function() {
+            $('form#change-window button[type="submit"]').attr('disabled', false);
+        }, 3000);
     });
 })(window.$);

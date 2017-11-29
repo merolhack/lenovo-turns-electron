@@ -34,7 +34,7 @@ function createWindow () {
   }));
 
   // DEBUG: Open the DevTools.
-  // win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -60,7 +60,6 @@ function createWindow () {
       });
     }
     function getCurrentTurn(cb) {
-      socket.emit('request-turn', {});
       socket.on('set-requested-turn', function(payload) {
         cb(payload);
       });
@@ -75,12 +74,12 @@ function createWindow () {
         cb(null, payload);
       });
     }
-    // 
-    socket.on('turn-created', (payload) => {
-        console.log('payload:', payload);
-        // document.getElementById('turn').innerHTML(payload.counter);
-        // ipcMain.send();
+
+    subscribeToCurrentTurn(function(err, payload) {
+      console.log('subscribeToCurrentTurn | currentTurn:', payload);
+      event.sender.send('set-current-turn', {counter: payload.groupName + '' + payload.counter});
     });
+
     // Listen events from the rendered
     ipcMain.on('update-window-data', (event, arg) => {
       socket.emit('update-window-data', arg);
@@ -110,10 +109,6 @@ function createWindow () {
           currentTurn = payload.documentFound;
           event.sender.send('set-current-turn', {counter: currentTurn.group + '' + currentTurn.counter});
         }
-      });
-      subscribeToCurrentTurn(function(err, payload) {
-          console.log('currentTurn:', payload);
-          event.sender.send('set-current-turn', {counter: payload.groupName + '' + payload.counter});
       });
     });
     ipcMain.on('complete-turn', (event, arg) => {
