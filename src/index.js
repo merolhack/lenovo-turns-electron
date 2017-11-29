@@ -18,10 +18,12 @@ function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
     titleBarStyle: 'hidden',
-    width: 1200, 
-    height: 800,
-    minWidth: 1200,
-    minHeight: 800,
+    width: 1000, 
+    height: 650,
+    minWidth: 1000,
+    minHeight: 650,
+    maxWidth: 1000,
+    maxHeight: 650,
     show: true,
     icon: path.join(__dirname, 'assets/img/icon/BadwingMoto.png')
   });

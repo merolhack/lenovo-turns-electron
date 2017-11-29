@@ -67,7 +67,7 @@ const swal = require('sweetalert');
                     if ($('a#new-service').is(':visible') && $('a#finish-service').is(':visible')) {
                         $('a#finish-service').show();
                     } else {
-                        swal("Error", "No hay turno disponible", "error");
+                        swal("No hay turno disponible","");
                         $('a#new-service').show();
                     }
                 });
@@ -95,6 +95,6 @@ const swal = require('sweetalert');
         }
         setTimeout(function() {
             $('form#change-window button[type="submit"]').attr('disabled', false);
-        }, 3000);
+        }, 1000);
     });
 })(window.$);
