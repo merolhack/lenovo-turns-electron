@@ -115,7 +115,9 @@ function createWindow () {
       getCurrentTurn(function(payload) {
         console.log('getCurrentTurn | payload:', JSON.stringify(payload));
         if (!payload.documentFound) {
-          event.sender.send('there-is-no-turn', {});
+          if (payload.window == wind0w.number) {
+            event.sender.send('there-is-no-turn', {});
+          }
         } else {
           // Check if the current turn is of this window
           if (payload.documentFound.window === wind0w.number && payload.documentFound.group === wind0w.group) {
