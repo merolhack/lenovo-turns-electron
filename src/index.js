@@ -102,6 +102,7 @@ function createWindow () {
         windowGroup: wind0w.group,
         windowUsername: wind0w.username,
       };
+      console.log('requestTurnPayload:', requestTurnPayload);
       socket.emit('request-turn', requestTurnPayload);
       console.log('ipcMain | arg:', arg);  // prints "ping"
       getCurrentTurn(function(payload) {
@@ -109,8 +110,11 @@ function createWindow () {
         if (!payload.documentFound) {
           event.sender.send('there-is-no-turn', {});
         } else {
-          currentTurn = payload.documentFound;
-          event.sender.send('set-current-turn', {counter: currentTurn.group + '' + currentTurn.counter});
+          // Check if the current turn is of this window
+          if (payload.documentFound.window === wind0w.number && payload.documentFound.group === wind0w.number) {
+            currentTurn = payload.documentFound;
+            event.sender.send('set-current-turn', {counter: currentTurn.group + '' + currentTurn.counter});
+          }
         }
       });
     });
