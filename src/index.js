@@ -95,7 +95,7 @@ function createWindow () {
           event.sender.send('set-windows-data', {error: true});
         } else {
           // Check if is the same info
-          if (currentWind0w.number === payload.number && currentWind0w.username === payload.username) {
+          if (currentWind0w.number == payload.number && currentWind0w.username == payload.username) {
             wind0w = payload;
             event.sender.send('set-windows-data', {payload});
           }
