@@ -100,6 +100,7 @@ function createWindow () {
       const requestTurnPayload = {
         windowId: wind0w.number,
         windowGroup: wind0w.group,
+        windowUsername: wind0w.username,
       };
       socket.emit('request-turn', requestTurnPayload);
       console.log('ipcMain | arg:', arg);  // prints "ping"
