@@ -133,8 +133,12 @@ function createWindow () {
       };
       console.log('complete-turn', requestTurnPayload);
       socket.emit('complete-turn', requestTurnPayload);
-      subscribeToTurnCompleted(function(err, payload) {
-        event.sender.send('turn-completed', {payload});
+      subscribeToTurnCompleted(function(err, data) {
+        console.log('complete-turn | payload:', data.payload);
+        // Check if the turn is completed
+        if ( data.payload.window == wind0w.number && data.payload.group == wind0w.group ) {
+          event.sender.send('turn-completed', {data});
+        }
       });
     });
   });
