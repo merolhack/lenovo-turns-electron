@@ -11,6 +11,7 @@ let win;
 
 // Information of the current window
 let wind0w;
+let currentWind0w;
 // Information of the current turn
 let currentTurn;
 
@@ -84,14 +85,20 @@ function createWindow () {
 
     // Listen events from the rendered
     ipcMain.on('update-window-data', (event, arg) => {
+      console.log('update-window-data | arg:', arg);
+      // Update current window data to compare it later
+      currentWind0w = arg;
       socket.emit('update-window-data', arg);
       subscribeToUpdateWindowData(function(err, payload) {
         console.log('subscribeToUpdateWindowData:', err, payload);
         if (payload === null) {
           event.sender.send('set-windows-data', {error: true});
         } else {
-          wind0w = payload;
-          event.sender.send('set-windows-data', {payload});
+          // Check if is the same info
+          if (currentWind0w.number === payload.number && currentWind0w.username === payload.username) {
+            wind0w = payload;
+            event.sender.send('set-windows-data', {payload});
+          }
         }
       });
     });
