@@ -35,7 +35,7 @@ const swal = require('sweetalert');
         $('form#change-window button[type="submit"]').attr('disabled', true);
         const number = $('input#number').val();
         const username = $('input#username').val();
-        if (parseInt(number) >= 1 && parseInt(number) <= 6) {
+        if (parseInt(number) >= 1 && parseInt(number) <= 7) {
             console.log('update-window-data', {number});
             ipcRenderer.send('update-window-data', {number, username});
             // Get the initial value
@@ -91,7 +91,7 @@ const swal = require('sweetalert');
                 });
             });
         } else {
-            alert('Debe ingresar un número igual o mayor a 1 y menor a 6');
+            alert('Debe ingresar un número igual o mayor a 1 y menor o igual a 7');
         }
         setTimeout(function() {
             $('form#change-window button[type="submit"]').attr('disabled', false);
